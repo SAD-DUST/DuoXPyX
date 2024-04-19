@@ -1,0 +1,16 @@
+name: Daily lessons
+on:
+  schedule:
+    - cron: '5 17 * * *' # <- Use UTC Time +0 , change your time here ( 14 is hour , 0 is minutes ) and use 24-hour format
+
+   
+jobs:
+  Manual:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4    
+      - name: Run DuoXPy
+        run: python main.py
+        env:
+          JWT_TOKEN: ${{ secrets.JWT_TOKEN }}
+          LESSONS: 100000000000
