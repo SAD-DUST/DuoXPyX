@@ -1,8 +1,3 @@
-# --------------------------- #
-# Made by GorouFlex           #
-# Ported from rfoal/duolingo  #
-# Version 1.7                 #
-# --------------------------- #
 import os
 import requests
 import json
