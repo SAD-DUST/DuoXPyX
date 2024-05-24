@@ -149,7 +149,7 @@ try:
     xpGains = data['xpGains']
     skillId = xpGains[0]['skillId']
 except:
-    print(f"{colors.FAIL}Your Duolingo account has been banned or does not exist{colors.ENDC}")
+    print(f"{colors.FAIL}Your Duolingo account has been banned/does not exist or you didn't do any lesson, please do atleats 1 lesson{colors.ENDC}")
     exit(-1)
 
 skillId = next(
@@ -258,9 +258,10 @@ for i in range(int(lessons)):
     print(f"{colors.OKGREEN}[{i+1}] - {end_data['xpGain']} XP{colors.ENDC}")
 
 # Delete Config folder after running done on GitHub Actions (idk if it's useful or not)
+# Delete Config folder after running done on GitHub Actions (idk if it's useful or not)
 if os.getenv('GITHUB_ACTIONS') == 'true':
     try:
-      shutil.rmtree(config_folder)
+      shutil.rmtree(os.path.join(os.getcwd(), 'config'))
       print(f"{colors.WARNING}Cleaning up..{colors.ENDC}")
     except Exception as e:
       print(f"{colors.FAIL}Error deleting config folder: {e}{colors.ENDC}")
