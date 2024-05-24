@@ -1,3 +1,8 @@
+# --------------------------- #
+# Made by GorouFlex           #
+# Ported from rfoal/duolingo  #
+# Version 1.8                 #
+# --------------------------- #
 import os
 import requests
 import json
@@ -8,7 +13,6 @@ from configparser import ConfigParser
 from getpass import getpass
 from datetime import datetime
 
-# Define ANSI escape code, i don't want to use colorama since i cannot figure how to make it works on cross-platform
 class colors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -31,37 +35,11 @@ config.read(config_path)
 # Print information window
 print(f"{colors.WARNING}------- Welcome to DuoXPy -------{colors.ENDC}")
 print(f"{colors.OKBLUE}Made by GFx{colors.ENDC}")
-# If this script were on GitHub Actions
-if os.getenv('GITHUB_ACTIONS') == 'true':
-    print(f"{colors.OKBLUE}Powered by GitHub Actions V3 and Python{colors.ENDC}")
-    print(f"{colors.OKGREEN}Run with GitHub Actions: Yes{colors.ENDC}")
-    print(f"{colors.WHITE}Current repo: {os.getenv('GITHUB_REPOSITORY')}{colors.ENDC}")
-    # Check repo commit 
-    user_repo = os.getenv('GITHUB_REPOSITORY')
-    ORIGINAL_REPO = 'gorouflex/DuoXPy'
-    user_url = f'https://api.github.com/repos/{user_repo}/commits?path=main.py'
-    original_url = f'https://api.github.com/repos/{ORIGINAL_REPO}/commits?path=main.py'
-    user_response = requests.get(user_url, timeout=10000)
-    original_response = requests.get(original_url, timeout=10000)
-    # If the API response 200 not other code to prevent some unexpected things
-    if user_response.status_code == 200 and original_response.status_code == 200:
-        user_commit = user_response.json()[0]['sha']
-        original_commit = original_response.json()[0]['sha']
-        if user_commit == original_commit:
-            print(f"{colors.OKGREEN}Your repo is up-to-date with the original repo{colors.ENDC}")
-        else:
-            print(f"{colors.WARNING}Your repo is not up-to-date with the original repo{colors.ENDC}")
-            print(f"{colors.FAIL}Please update your repo to the latest commit{colors.ENDC}{colors.FAIL} to get new updates and bug fixes{colors.ENDC}")
-    else:
-        print(f"{colors.WARNING}--------- Traceback log ---------{colors.ENDC}\n{colors.FAIL}❌ Error code 4: Failed to fetch commit information\nPlease refer to: https://github.com/gorouflex/HoneygainPot/blob/main/Docs/Debug.md for more information\nOr create an Issue on GitHub if it still doesn't work for you.{colors.ENDC}")
-    print(f"{colors.WARNING}Lessons: {os.getenv('LESSONS')}{colors.ENDC}")
-else:
-    print(f"{colors.FAIL}Run with GitHub Actions: No{colors.ENDC}")
-    try:
-        lessons = config.get('User', 'LESSONS')
-        print(f"{colors.WARNING}Lessons: {lessons}{colors.ENDC}")
-    except:
-        print(f"{colors.WARNING}Lessons: N/A{colors.ENDC}")
+try:
+   lessons = config.get('User', 'LESSONS')
+   print(f"{colors.WARNING}Lessons: {lessons}{colors.ENDC}")
+except:
+   print(f"{colors.WARNING}Lessons: N/A{colors.ENDC}")
 print(f"{colors.WHITE}Codename: Sandy{colors.ENDC}")
 print(f"{colors.WHITE}Config folder:", os.path.join(os.getcwd(), f"{colors.WHITE}Config{colors.ENDC}"))
 print(f"{colors.WARNING}---------------------------------{colors.ENDC}")
