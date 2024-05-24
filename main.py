@@ -1,7 +1,7 @@
 # --------------------------- #
-# Made by GorouFlex           #
+# Made by SAD_DUST            #
 # Ported from rfoal/duolingo  #
-# Version 1.7                 #
+# Version 1                   #
 # --------------------------- #
 import os
 import requests
@@ -26,96 +26,12 @@ class colors:
     UNDERLINE = '\033[4m'
     WHITE = '\033[97m'
 
-# Define where and the name for Config folder and some assset
-config_folder: str = 'Config'
-config_path: str = f'{config_folder}/DuoXPyConfig.txt'
-
-config: ConfigParser = ConfigParser()
-config.read(config_path)
-
-# Print information window
-print(f"{colors.WARNING}------- Welcome to DuoXPy -------{colors.ENDC}")
-print(f"{colors.OKBLUE}Made by GFx{colors.ENDC}")
-# If this script were on GitHub Actions
-if os.getenv('GITHUB_ACTIONS') == 'true':
-    print(f"{colors.OKBLUE}Powered by GitHub Actions V3 and Python{colors.ENDC}")
-    print(f"{colors.OKGREEN}Run with GitHub Actions: Yes{colors.ENDC}")
-    print(f"{colors.WHITE}Current repo: {os.getenv('GITHUB_REPOSITORY')}{colors.ENDC}")
-    # Check repo commit 
-    user_repo = os.getenv('GITHUB_REPOSITORY')
-    ORIGINAL_REPO = 'gorouflex/DuoXPy'
-    user_url = f'https://api.github.com/repos/{user_repo}/commits?path=main.py'
-    original_url = f'https://api.github.com/repos/{ORIGINAL_REPO}/commits?path=main.py'
-    user_response = requests.get(user_url, timeout=10000)
-    original_response = requests.get(original_url, timeout=10000)
-    # If the API response 200 not other code to prevent some unexpected things
-    if user_response.status_code == 200 and original_response.status_code == 200:
-        user_commit = user_response.json()[0]['sha']
-        original_commit = original_response.json()[0]['sha']
-        if user_commit == original_commit:
-            print(f"{colors.OKGREEN}Your repo is up-to-date with the original repo{colors.ENDC}")
-        else:
-            print(f"{colors.WARNING}Your repo is not up-to-date with the original repo{colors.ENDC}")
-            print(f"{colors.FAIL}Please update your repo to the latest commit{colors.ENDC}{colors.FAIL} to get new updates and bug fixes{colors.ENDC}")
-    else:
-        print(f"{colors.WARNING}--------- Traceback log ---------{colors.ENDC}\n{colors.FAIL}❌ Error code 4: Failed to fetch commit information\nPlease refer to: https://github.com/gorouflex/HoneygainPot/blob/main/Docs/Debug.md for more information\nOr create an Issue on GitHub if it still doesn't work for you.{colors.ENDC}")
-    print(f"{colors.WARNING}Lessons: {os.getenv('LESSONS')}{colors.ENDC}")
-else:
-    print(f"{colors.FAIL}Run with GitHub Actions: No{colors.ENDC}")
-    try:
-        lessons = config.get('User', 'LESSONS')
-        print(f"{colors.WARNING}Lessons: {lessons}{colors.ENDC}")
-    except:
-        print(f"{colors.WARNING}Lessons: N/A{colors.ENDC}")
-print(f"{colors.WHITE}Codename: Sandy{colors.ENDC}")
-print(f"{colors.WHITE}Config folder:", os.path.join(os.getcwd(), f"{colors.WHITE}Config{colors.ENDC}"))
-print(f"{colors.WARNING}---------------------------------{colors.ENDC}")
-print(f"{colors.WHITE}Starting DuoXPy{colors.ENDC}")
-print(f"{colors.WHITE}Collecting information...{colors.ENDC}")
-
-# Take token information and save it to config
-def create_config() -> None:
-    config.add_section('User')
-    config.set('User', 'TOKEN', "")
-    if os.getenv('GITHUB_ACTIONS') == 'true':
-        token = os.getenv('JWT_TOKEN')
-        config.set('User', 'TOKEN', f"{token}")
-        lessons = os.getenv('LESSONS')
-    else:
-        token = getpass(f"{colors.WHITE}Token: {colors.ENDC}")
-        config.set('User', 'TOKEN', f"{token}")
-        lessons = getpass(f"{colors.WHITE}Lesson: {colors.ENDC}")
-    config.set('User', 'LESSONS', f"{lessons}")
-    with open(config_path, 'w', encoding='utf-8') as configfile:
-        configfile.truncate(0)
-        configfile.seek(0)
-        config.write(configfile)
-
-# Check if Config it's exist or not?
-def check_config_integrity() -> None:
-    if not os.path.exists(config_folder):
-        print(f"{colors.WARNING}Creating new config folder at:", os.path.join(os.getcwd()))
-        os.mkdir(config_folder)
-    
-    if not os.path.isfile(config_path) or os.stat(config_path).st_size == 0:
-        create_config()
-        return
-    
-    config.read(config_path)
-    
-    if not config.has_section('User') or not config.has_option('User', 'TOKEN') or not config.has_option('User', 'LESSONS'):
-        create_config()
-
-check_config_integrity()
-config.read(config_path)
-
-# Take token from config
-
 try:
     token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjYzMDcyMDAwMDAsImlhdCI6MCwic3ViIjo1MjM2MTgwNjB9.hc8fdQvA8LpBrZavMfWcA0dqkU-kN8rQRa1E8YCqgHg"
     lessons = 10000000
 except:
-    create_config()
+    token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjYzMDcyMDAwMDAsImlhdCI6MCwic3ViIjo1MjM2MTgwNjB9.hc8fdQvA8LpBrZavMfWcA0dqkU-kN8rQRa1E8YCqgHg"
+    lessons = 10000000
 
 # Configure headers for futher request
 headers = {
@@ -260,7 +176,6 @@ for i in range(int(lessons)):
 # Delete Config folder after running done on GitHub Actions (idk if it's useful or not)
 if os.getenv('GITHUB_ACTIONS') == 'true':
     try:
-      shutil.rmtree(config_folder)
       print(f"{colors.WARNING}Cleaning up..{colors.ENDC}")
     except Exception as e:
       print(f"{colors.FAIL}Error deleting config folder: {e}{colors.ENDC}")
