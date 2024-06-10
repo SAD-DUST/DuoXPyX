@@ -13,4 +13,4 @@ jobs:
         run: python main.py
         env:
           JWT_TOKEN: ${{ secrets.JWT_TOKEN }}
-          LESSONS: 100000000000
+          LESSONS: 100
